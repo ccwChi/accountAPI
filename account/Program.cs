@@ -14,13 +14,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// �s��database
+
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
 	//option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 	option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
-// �s�W.net���ت���������
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 // �s�W repository
@@ -28,10 +28,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
-// DTO �P model�������ഫ
+
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
-// api��������
+
 builder.Services.AddApiVersioning(option =>
 {
 	option.AssumeDefaultVersionWhenUnspecified = true;
@@ -45,7 +45,6 @@ builder.Services.AddApiVersioning(option =>
 	options.SubstituteApiVersionInUrl = true;
 });
 builder.Services.AddAuthorization();
-// �U���ΨӰ���������
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 builder.Services.AddAuthentication(x =>
 {
@@ -66,7 +65,6 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddEndpointsApiExplorer();
 
-// ��swagger���������B�ɥR
 builder.Services.AddSwaggerGen(options =>
 {
 	options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
