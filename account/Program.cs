@@ -17,8 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
-	//option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
-	option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
+	option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
+	//option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
@@ -87,7 +87,7 @@ builder.Services.AddSwaggerGen(options =>
 					Type = ReferenceType.SecurityScheme,
 					Id = "Bearer"
 				},
-				Scheme = "oauth2",
+				Scheme = "bearer",
 				Name = "Bearer",
 				In = ParameterLocation.Header
 			},
@@ -98,13 +98,13 @@ builder.Services.AddSwaggerGen(options =>
 	{
 		Version = "v1",
 		Title = "Account_App V1",
-		Description = "API to manage Account_App",
-		TermsOfService = new Uri("https://example.com/terms"),
+		Description = "API to manage Account_App\n\n密碼格式需含有大小寫英文+數字+特殊符號，例如 Abc123*\n\n代入token前面需要Bearer +token",
 		Contact = new OpenApiContact
 		{
-			Name = "Dotnetmastery",
-			Url = new Uri("https://example.com/terms")
+			Name = "Portfolio_web",
+			Url = new Uri("https://ccwchi.github.io/portfolio_web/")
 		},
+		TermsOfService = new Uri("https://example.com/terms"),
 		License = new OpenApiLicense
 		{
 			Name = "Example License",
@@ -138,12 +138,24 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
-app.UseSwaggerUI(options =>
-{
-	options.SwaggerEndpoint("/swagger/v1/swagger.json", "AccountAppV1");
 
-	options.SwaggerEndpoint("/swagger/v2/swagger.json", "AccountAppV2");
-});
+if (app.Environment.IsDevelopment())
+{
+	app.UseSwaggerUI(options =>
+	{
+		options.SwaggerEndpoint("/swagger/v1/swagger.json", "AccountAppV1");
+		options.SwaggerEndpoint("/swagger/v2/swagger.json", "AccountAppV2");
+	});
+}
+else
+{
+	app.UseSwaggerUI(options =>
+	{
+		options.SwaggerEndpoint("/swagger/v1/swagger.json", "AccountAppV1");
+		options.SwaggerEndpoint("/swagger/v2/swagger.json", "AccountAppV2");
+		options.RoutePrefix = "";
+	});
+}
 
 
 app.UseHttpsRedirection();
@@ -153,3 +165,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+
