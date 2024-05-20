@@ -1,0 +1,20 @@
+# Visual Studio specific files
+.vs/
+*.user
+*.suo
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+build/
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
+
+# Other temporary files
+*.log
+*.vsidx
